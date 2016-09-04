@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>history API </title>
+    <style>
+        #canvas{
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="300" height="300"></canvas>
+<img src="./1.png" id="image" alt=""/>
+<button id="before">前进</button>
+<button id="after">后退</button>
+</body>
+<script>
+    window.onload = function(){
+        var canvas = document.getElementById('canvas');
+        var image = document.getElementById('image');
+
+        var context = canvas.getContext('2d');
+        var isDrawing = false;
+
+        canvas.addEventListener('pointerdown',function(e){
+            e.preventManipulation()
+        },false);
+        canvas.addEventListener('mousedown',startDrawing,false);
+        canvas.addEventListener('mousemove',draw,false);
+        canvas.addEventListener('mouseup',stopDrawing,false);
+        window.addEventListener('popstate',loadState,false);
+
+        function startDrawing(){
+            isDrawing = true;
+        }
+
+        function draw (e){
+            if(isDrawing){
+                var x = e.clientX;
+                var y = e.clientY;
+                context.drawImage(image,x,y);
+            }
+        }
+
+        function stopDrawing(){
+            isDrawing = false;
+            var state = context.getImageData(0,0,canvas.width,canvas.height);
+            history.pushState(state,null);
+        }
+
+        function loadState(e){
+            context.clearRect(0,0,canvas.width,canvas.height);
+            if(e.state){
+                context.putImageData(e.state,0,0)
+            }else{
+                alert('已经没有记录了');
+            }
+
+        }
+        var beforeBtn = document.getElementById('before');
+        var afterBtn = document.getElementById('after');
+        beforeBtn.addEventListener('click',beforeFn,false);
+        afterBtn.addEventListener('click',afterFn,false);
+        function beforeFn (){
+            window.history.forward();
+        }
+        function afterFn (){
+            window.history.back();
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地数据库sqlLite</title>
+</head>
+<body>
+<h1>使用数据库实现web留言本</h1>
+<table>
+    <tr>
+        <td>姓名</td>
+        <td><input type="text" id="name"/></td>
+    </tr>
+    <tr>
+        <td>留言</td>
+        <td><input type="text" id="memo"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="button" id="save" value="保存"/></td>
+    </tr>
+</table>
+<hr/>
+<table id="datatable" border="1"></table>
+</body>
+<script>
+    window.onload = function (){
+        var datatable = document.getElementById('datatable');
+        /*
+        * openDatabase('数据库名称','[数据库版本]','[数据库描述]','数据库分配空间')
+        * 返回创建后的数据库访问对象；如果不存在这个数据库就创建一个数据库；
+        * */
+        var db = openDatabase('mydb1','1.0','test db',2*1024*1024);
+        var saveBtn = document.getElementById('save');
+        saveBtn.addEventListener('click',saveFn,false);
+
+        function init(){
+            showAlldata();
+        }
+        init();
+
+        function removeAllData(){
+            datatable.innerHTML = '';
+            var str = '<tr><th>姓名</th><th>留言内容</th><th>时间</th></tr>';
+            datatable.innerHTML = str;
+        }
+
+        function showAlldata(){
+            removeAllData();
+            /*
+            * db.transaction()
+            * 回调中的参数可以执行sql语句；
+            * */
+            db.transaction(function(tx){
+                tx.executeSql('CREATE TABLE IF NOT EXISTS msgdata (name TEXT,memo TEXT,time TEXT)',[]);
+                tx.executeSql('SELECT * FROM msgdata',[],function(tx,rs){
+                    /*
+                    * rs results 结果中包含每一行的数据；
+                    * 每行中的每列可以用rs.rows.item(i).name;获得；
+                    * */
+                    for(var i =0;i<rs.rows.length;i++){
+                        var tr = document.createElement('tr');
+                        var td1 = document.createElement('td');
+                            td1.innerHTML = rs.rows.item(i).name;
+                        var td2 = document.createElement('td');
+                            td2.innerHTML = rs.rows.item(i).memo;
+                        var td3 = document.createElement('td');
+                        var t = new Date();
+                            t.setTime(rs.rows.item(i).time);
+                            td3.innerHTML = t.toLocaleDateString()+' '+ t.toLocaleTimeString();
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        datatable.appendChild(tr);
+                    }
+                })
+            })
+        }
+
+        function saveFn (){
+            var nameEle = document.getElementById('name');
+            var name = nameEle.value;
+            var memoEle = document.getElementById('memo');
+            var memo = memoEle.value;
+            var time = new Date().getTime();
+            addData(name,memo,time);
+            showAlldata();
+            nameEle.value = '';
+            memoEle.value = '';
+        }
+
+        function addData (name,memo,time){
+            db.transaction(function(tx){
+                tx.executeSql('INSERT INTO msgdata VALUES(?,?,?)',[name,memo,time],function(tx,rs){
+                    alert('保存数据成功')
+                },function(tx,error){
+                    alert('保存失败');
+                    console.log(error.message);
+                })
+            })
+        }
+
+    }
+</script>
+</html>

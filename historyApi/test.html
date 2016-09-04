@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<ul class="box">
+    <li>1</li>
+</ul>
+<button id="add">添加字符串</button>
+<script>
+    window.onload = function(){
+        var btn = document.getElementById('add');
+        var box = document.getElementsByClassName('box')[0];
+        add.addEventListener('click',addFn,false);
+        function addFn (){
+            var length = box.getElementsByTagName('li').length;
+            var child = document.createElement('li');
+            child.innerHTML = length+1;
+            box.appendChild(child);
+            var state = box.innerHTML;
+            window.history.pushState(state,null);
+        }
+        window.addEventListener('popstate',loadState,false);
+        function loadState(e){
+            if(e.state){
+                box.innerHTML = e.state;
+            }
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>localstorage storage 事件</title>
+</head>
+<body>
+<input type="text" id="changeValue"/>
+<input type="button" id="changeBtn" value="改变localstorage"/>
+<script>
+    window.onload = function(){
+        var changeBtn = document.getElementById('changeBtn');
+        var changeValue = document.getElementById('changeValue');
+        changeBtn.addEventListener('click',changeFn,false);
+        function changeFn (){
+            var val = changeValue.value;
+            localStorage.setItem('test',val);
+        }
+    }
+</script>
+</body>
+</html>

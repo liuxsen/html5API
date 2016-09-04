@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地存储 localstorage</title>
+</head>
+<body>
+<textarea name="" id="box" cols="30" rows="10"></textarea>
+<input type="button" id="saveBtn" value="存储"/>
+<input type="button" value="清除" id="clearDataBtn"/>
+<p id="info"></p>
+<script>
+    window.onload = function () {
+        var infoBox = document.getElementById('box');
+        var saveBtn = document.getElementById('saveBtn');
+        var clearDataBtn = document.getElementById('clearDataBtn');
+        var endInfoBox = document.getElementById('info');
+        saveBtn.addEventListener('click',saveDataFn,false);
+        clearDataBtn.addEventListener('click',clearDataFn,false);
+        function saveDataFn(){
+            var infoData = infoBox.value;
+            var currTime = new Date().getTime();
+            localStorage.setItem(currTime,infoData);
+            loadStorage();
+            infoBox.value = '';
+        }
+        /*
+        * 加载localstorage保存的数据
+        * */
+        function loadStorage(){
+            var resultStr = '<table border="1">';
+            for(var i = 0;i<localStorage.length;i++){
+                var key = localStorage.key(i);
+                var time = new Date();
+                time.setTime(key);
+                time = time.toGMTString();
+                var currHtml = localStorage.getItem(key);
+                resultStr+='<tr><td>'+time+'</td><td>'+currHtml+'</td></tr>'
+            }
+            resultStr+='</table>';
+            endInfoBox.innerHTML = resultStr;
+        }
+        /*
+        * 清除全部的数据
+        * */
+        function clearDataFn(){
+            localStorage.clear();
+            loadStorage();
+        }
+
+    }
+</script>
+</body>
+</html>

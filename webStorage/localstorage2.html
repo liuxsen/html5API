@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用localstorage做简易的数据库</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>姓名</td>
+        <td><input type="text" id="name"/></td>
+    </tr>
+    <tr>
+        <td>email</td>
+        <td><input type="text" id="email"/></td>
+    </tr>
+    <tr>
+        <td>电话号码</td>
+        <td><input type="text" id="phone"/></td>
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td><input type="text" id="memo"/></td>
+    </tr>
+    <tr>
+        <td><input type="button" value="保存" id="saveBtn"/></td>
+    </tr>
+</table>
+<p>
+    <label>检索</label>
+    <input type="text" id="searchInput"/>
+    <input type="button" value="检索" id="searchBtn"/>
+</p>
+<div id="result"></div>
+</body>
+<script>
+    window.onload = function (){
+        var name = document.getElementById('name');
+        var email = document.getElementById('email');
+        var phone = document.getElementById('phone');
+        var memo = document.getElementById('memo');
+        var searchInput = document.getElementById('searchInput');
+        var searchBtn = document.getElementById('searchBtn');
+        var saveBtn = document.getElementById('saveBtn');
+
+        saveBtn.addEventListener('click',saveDataFn,false);
+        searchBtn.addEventListener('click',searchFn,false);
+
+        function saveDataFn (){
+            var data = {};
+                data.name = name.value;
+                data.email = email.value;
+                data.phone = phone.value;
+                data.memo = memo.value;
+            var dataStr = JSON.stringify(data);
+            console.log(dataStr);
+            window.localStorage.setItem(data.name,dataStr);
+        }
+        function searchFn (){
+            var searchStr = searchInput.value;
+            var resultStr = '';
+            var searchResult = localStorage.getItem(searchStr);
+                searchResult = JSON.parse(searchResult);
+            resultStr += '<p>姓名：'+searchResult.name+'</p>'+
+                         '<p>email：'+searchResult.email+'</p>'+
+                         '<p>phone：'+searchResult.phone+'</p>'+
+                         '<p>memo：'+searchResult.memo+'</p>';
+            var resultBox = document.getElementById('result');
+                resultBox.innerHTML = resultStr;
+        }
+        }
+</script>
+</html>

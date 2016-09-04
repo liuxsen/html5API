@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>localstorage storage 事件</title>
+</head>
+<body>
+    <p id="output"></p>
+    <script>
+        window.onload = function(){
+            var output = document.getElementById('output');
+            window.addEventListener('storage',storageWatch,false);
+            function storageWatch (e){
+                if(e.key == 'test'){
+                    var innerHtml = '';
+                        innerHtml += 'oldvalue:'+ e.oldValue+
+                                     'newvalue:'+ e.newValue+
+                                        'url:'+ e.url;
+                    output.innerHTML = innerHtml;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
