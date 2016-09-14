@@ -1,0 +1,43 @@
+.swiper-container{
+	width: 500px;
+	height: 200px;
+	overflow: hidden;
+	margin: 0 auto;
+    position: relative;
+}
+.swiper-wrapper{
+	height: 100%;
+	width: 1000%;
+	background-color: #eee;
+    position: relative;
+}
+.swiper-wrapper .swiper-slide{
+	float: left;
+	height: 100%;
+	width: 500px;
+	border: 1px solid #fff;
+	box-sizing: border-box;
+}
+.swiper-pagination{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+.swiper-pagination span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    background: #fff;
+    margin: 5px;
+    color: #333;
+    font-size: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.swiper-pagination span.active{
+    background: rgb(100,200,200);
+    color: #fff;
+}
