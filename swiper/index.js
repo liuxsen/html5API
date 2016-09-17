@@ -49,6 +49,23 @@
             this.activeIndex = 0;
             this.startAutoplay();
         },
+        setPreview: function(val) {
+            this.slidePreview = val * 1;
+            this.stopAutoplay();
+            var boxClass = this.swipeClass;
+            var parentWidth = $(boxClass).parent().width();
+            $(boxClass).find('.swiper-slide').css({ width: (1 / this.slidePreview) * parentWidth });
+            this.stepLong = $(boxClass).find('.swiper-slide').outerWidth();
+            this.stopAutoplay();
+            var defaultSlide = $(boxClass).find('.swiper-slide.default').clone();
+            $(boxClass).find('.swiper-slide').remove();
+            $(boxClass).prepend(defaultSlide);
+            this.preInit();
+            this.activeIndex = 0;
+            $(".swiper-pagination span").removeClass('active').eq(0).addClass('active')
+                // $(boxClass).css({ 'marginLeft': -this.slidePreview * this.stepLong });
+            this.startAutoplay();
+        },
         /*
          * 复制，为循环做准备
          * */
@@ -254,18 +271,12 @@ $(function() {
     $("#prev").on('click', function() {
         a.slidePrev();
     })
+    $("#setPreview").on('blur', function() {
+        a.setPreview($(this).val());
+    })
 
-    function setSpeed(value) {
-        value = value * 1;
-        a = new Swiper({
-            className: '.swiper-wrapper',
-            autoplay: 2000,
-            slidePreview: 2,
-            spaceBetween: 10,
-            speed: value
-        });
-        a.init();
-    }
+
+
     $("#speed").on('blur', function() {
         a.setSpeed($(this).val())
     })
